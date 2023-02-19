@@ -1,6 +1,6 @@
 # [level 1] 이상한 문자 만들기 - 12930 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/12930?language=cpp) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/12930) 
 
 ### 성능 요약
 

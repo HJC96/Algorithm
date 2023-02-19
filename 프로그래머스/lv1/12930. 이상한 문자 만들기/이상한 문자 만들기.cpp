@@ -2,23 +2,18 @@
 #include <vector>
 #include <iostream>
 using namespace std;
-
+// 투포인터	" TrY HeLlO WoRlD "
 string solution(string s) {
-    string answer = "";
-    int length = s.size();       
-    
     int idx = 0;
-    for(int i=0; i<length ;i++)
+    for(int i=0; i<s.size();i++)
     {
         if(s[i] == ' ')
         {
-            idx = 0;
+            idx=0;
             continue;
         }
-        if(idx % 2 == 0)
-            s[i] = toupper(s[i]);
-        else
-            s[i] = tolower(s[i]);
+        if(idx % 2 == 0) s[i] = toupper(s[i]);
+        else             s[i] = tolower(s[i]);
         idx++;
     }
     return s;
