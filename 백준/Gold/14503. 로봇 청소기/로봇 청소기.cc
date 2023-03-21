@@ -1,17 +1,16 @@
 #include <iostream>
-#define max(a,b) ((a)>(b)?(a):(b))
-#define min(a,b) ((a)>(b)?(b):(a))
 
 using namespace std;
 
-typedef struct
+class robot
 {
-    int x, y;
-    int direct;
-}robot;
+    public:
+        int x, y;
+        int direct;
+};
 
 
-int map[51][51] = {1};
+int map[50][50];
 robot rbt;
 int dx[4] = { 0, 1, 0, -1}; // N, E, S, W
 int dy[4] = {-1, 0, 1,  0};
@@ -86,7 +85,6 @@ int move1()
     rbt.x = x;
     rbt.y = y;
     rbt.direct = cur_dir;
-    
     return 1;
 }
 
@@ -94,7 +92,6 @@ int move1()
 int main()
 {
     init();
-    int cnt =0;
     while(1)
     {
         clean();        
