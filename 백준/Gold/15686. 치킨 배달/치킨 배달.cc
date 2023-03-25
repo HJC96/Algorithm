@@ -12,7 +12,7 @@ vector<pair<int,int>> chick;
 vector<pair<int,int>> home;
 queue<pair<vector<int>,int>> que;
 
-int ans = 1215752191;
+int ans = 51*51;
 
 void init()
 {
@@ -58,7 +58,7 @@ void Combi(vector<int> choose, int level)
         vector<int> answer;
         for(int i=0;i<home.size();i++)
         {
-            int val = 1215752191;
+            int val = 51*51;
             for(int j=0;j<tmp.size();j++)
             {
                 val = min(tmp[j][i], val);
