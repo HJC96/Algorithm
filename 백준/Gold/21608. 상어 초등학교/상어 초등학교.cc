@@ -5,7 +5,6 @@
 
 using namespace std;
 
-
 int table[400][5] = {0,};
 int love_table[21][21]= {0,};
 int blank_table[21][21]= {0,};
@@ -14,9 +13,7 @@ int visited[21][21]= {0,};
 
 int dx[4] = {0, 1, 0, -1};
 int dy[4] = {-1, 0, 1, 0};
-int N;
-int m;
-int m2;
+int N, m, m2;
 
 void init()
 {
@@ -76,9 +73,9 @@ void find_blank(int r, int c)
 int main()
 {
     init();   
+    int ans = 0;
     int cnt = N*N;
 
-    int ans = 0;
     while(cnt >0)
     {
         m = 0;
@@ -101,7 +98,6 @@ int main()
             {
                 if(love_table[i][j] == m && !visited[i][j]){ 
                     s1.push({i,j});
-                    //cout << i << j <<endl;
                 }
             }
         }
@@ -117,9 +113,8 @@ int main()
             {
                 topy = s1.top().first;
                 topx = s1.top().second;
-                
+        
                 s1.pop();
-//                blank.push({topy, topx});
 
                 if(blank_table[topy][topx] >= blan)
                 {
@@ -127,29 +122,20 @@ int main()
                         blank.push({topy, topx});
                     else
                     {
-                        while(blank.size()>0)
-                        {
-                            blank.pop();
-                        }
-                        //cout << topy << topx << endl;
-
+                        while(blank.size()>0)   blank.pop();
                         blank.push({topy, topx});
                     }
                     blan = blank_table[topy][topx];
                 }
             }
-
-            /* 스택에 들어있는 녀석들 중 -> 블랭크가 가장 많은 칸으로 */
             while(blank.size()>0)
             {
                 topy = blank.top().first;
                 topx = blank.top().second;
-                //cout << topy << topx << blank_table[topy][topx]<<endl;;
 
                 blank.pop();
                 if(!visited[topy][topx])
                 {   
-                    //cout << topy << topx << blank_table[topy][topx]<<endl;
                     s2.push({topy,topx});
                 }
             }
@@ -157,7 +143,6 @@ int main()
             {
                 ans_table[s2.front().first][s2.front().second] = stdID;
                 visited[s2.front().first][s2.front().second] = 1;
-                
             }
             else
             {
@@ -173,8 +158,8 @@ int main()
                 visited[s1.top().first][s1.top().second] = 1;
             }
         }
-        //if(cnt == 8) break;
         cnt-=1;
+
     }
         for(int i=1;i<=N;i++)
         {
@@ -195,10 +180,7 @@ int main()
                     if(ans_table[y][x] == table[idx][2]) ct++;
                     if(ans_table[y][x] == table[idx][3]) ct++;
                     if(ans_table[y][x] == table[idx][4]) ct++; 
-                    //cout << ans_table[i][j];
                 }
-                    //cout << ct<<endl;
-
                 if(ct == 1)
                     ans += 1 * 1;
                 else if(ct == 2)
@@ -210,24 +192,5 @@ int main()
             }
             
         }
-// for(int i=1;i<=N;i++) {
-//     for(int j=1;j<=N;j++) {
-//         cout << ans_table[i][j] << " "; // 수정된 부분: 결과를 출력하는 작업 추가
-//     }
-// }
-// cout << endl;
-
-// for(int i=1;i<=N;i++) {
-//     for(int j=1;j<=N;j++) {
-//         cout << love_table[i][j] << " "; // 수정된 부분: 결과를 출력하는 작업 추가
-//     }
-// }
-// cout << endl;
-
-// for(int i=1;i<=N;i++) {
-//     for(int j=1;j<=N;j++) {
-//         cout << blank_table[i][j] << " "; // 수정된 부분: 결과를 출력하는 작업 추가
-//     }
-// }
     cout << ans;
 }
