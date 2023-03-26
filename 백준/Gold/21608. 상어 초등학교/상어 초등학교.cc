@@ -144,11 +144,6 @@ int main()
                 ans_table[s2.front().first][s2.front().second] = stdID;
                 visited[s2.front().first][s2.front().second] = 1;
             }
-            else
-            {
-                ans_table[topy][topx] = stdID;
-                visited[topy][topx] = 1;    
-            }
         }
         else
         {
