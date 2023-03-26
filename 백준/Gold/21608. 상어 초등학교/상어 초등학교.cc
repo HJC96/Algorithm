@@ -14,6 +14,7 @@ int visited[21][21]= {0,};
 int dx[4] = {0, 1, 0, -1};
 int dy[4] = {-1, 0, 1, 0};
 int N, m, m2;
+int ans=0;
 
 void init()
 {
@@ -70,10 +71,42 @@ void find_blank(int r, int c)
     else  blank_table[r][c] = -1;
 }
 
+void find_ans()
+{
+    for(int i=1;i<=N;i++)
+    {
+        for(int j=1;j<=N;j++)
+        {
+            int ct = 0;
+            for(int k=0;k<4;k++)
+            {
+                int y = i + dy[k];
+                int x = j + dx[k];
+
+                if(x <1 || y <1 || x >N || y>N)
+                    continue;
+                int idx=0;
+                while(ans_table[i][j] !=table[idx][0]) idx++;
+
+                if(ans_table[y][x] == table[idx][1]) ct++;
+                if(ans_table[y][x] == table[idx][2]) ct++;
+                if(ans_table[y][x] == table[idx][3]) ct++;
+                if(ans_table[y][x] == table[idx][4]) ct++; 
+            }
+            if(ct == 1)
+                ans += 1 * 1;
+            else if(ct == 2)
+                ans += 1 * 10;
+            else if(ct == 3)
+                ans += 1 * 100;
+            else if(ct == 4)
+                ans += 1* 1000;
+        } 
+    }
+}
 int main()
 {
     init();   
-    int ans = 0;
     int cnt = N*N;
 
     while(cnt >0)
@@ -147,45 +180,11 @@ int main()
         }
         else
         {
-            if(s1.size()>0)
-            {
-                ans_table[s1.top().first][s1.top().second] = stdID;
-                visited[s1.top().first][s1.top().second] = 1;
-            }
+            ans_table[s1.top().first][s1.top().second] = stdID;
+            visited[s1.top().first][s1.top().second] = 1;
         }
         cnt-=1;
-
     }
-        for(int i=1;i<=N;i++)
-        {
-            for(int j=1;j<=N;j++)
-            {
-                int ct = 0;
-                for(int k=0;k<4;k++)
-                {
-                    int y = i + dy[k];
-                    int x = j + dx[k];
-
-                    if(x <1 || y <1 || x >N || y>N)
-                        continue;
-                    int idx=0;
-                    while(ans_table[i][j] !=table[idx][0]) idx++;
-
-                    if(ans_table[y][x] == table[idx][1]) ct++;
-                    if(ans_table[y][x] == table[idx][2]) ct++;
-                    if(ans_table[y][x] == table[idx][3]) ct++;
-                    if(ans_table[y][x] == table[idx][4]) ct++; 
-                }
-                if(ct == 1)
-                    ans += 1 * 1;
-                else if(ct == 2)
-                    ans += 1 * 10;
-                else if(ct == 3)
-                    ans += 1 * 100;
-                else if(ct == 4)
-                    ans += 1* 1000;
-            }
-            
-        }
+    find_ans();
     cout << ans;
 }
