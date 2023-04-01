@@ -2,20 +2,6 @@
 #include <vector>
 using namespace std;
 
-// class Rain_Cloud
-// {
-//     public:
-//         int r1, c1;
-//         int r2, c2;
-//         int r3, c3;
-//         int r4, c4;
-// };
-
-// class point
-// {
-//     int r,c;
-// };
-
 int N, M;
 int map[51][51] = {0,};
 int table[101][2];
