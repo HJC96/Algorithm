@@ -7,11 +7,11 @@ int map[30][30];
 int group[30][30];
 int visited[30][30] = {0,};
 int dx[4] = {-1,0,1,0}; int dy[4] = {0,1,0,-1}; 
-int answer = 0; int group_cnt = 1;
-int group_hash[30]={0,}; // hash table
-int group_count_of_num[30]={0,};
+int group_cnt = 1;
+int group_hash[900]={0,}; // hash table
+int group_count_of_num[900]={0,};
 
-int near_num[30][30] = {0,};
+int near_num[900][900] = {0,};
 
 void input()
 {
@@ -51,13 +51,6 @@ void make_group(int x, int y)
 
             if(cur_x < 1 || cur_y < 1 || cur_x > n || cur_y > n || visited[cur_x][cur_y] == 1 || map[cur_x][cur_y] != num)
                 continue;
-            /*
-            if(map[cur_x][cur_y] != num)
-            {
-                //near_num[num][map[cur_x][cur_y]]++; 뒤에껀 해쉬값으로... 해야할듯
-                near_num[num][group[cur_x][cur_y]]++;
-            }
-            */
             visited[cur_x][cur_y] = 1;
             group[cur_x][cur_y] = group_cnt;
             save++;
@@ -109,16 +102,22 @@ int calculate(int g1, int g2)
 
 void init()
 {
-    int group_cnt = 1;
+    group_cnt = 1;
     for(int i=1;i<=n;i++)
     {
-        group_count_of_num[i] = 0;
-        group_hash[i] =0;
-
         for(int j=1;j<=n;j++)
         {
             visited[i][j] = 0;
             group[i][j] = 0;
+        }
+    }
+    for(int i=1;i<=900;i++)
+    {
+        group_count_of_num[i] = 0;
+        group_hash[i] =0;
+
+        for(int j=1;j<=900;j++)
+        {
             near_num[i][j] = 0;
         }
     }
@@ -185,6 +184,7 @@ void rotate()
 }
 int main() 
 {
+    int answer = 0;
     input();
     for(int i=1;i<=4;i++)
     {
@@ -217,24 +217,14 @@ int main()
                 if(art_score == 0)
                     continue;
                 else
-                    answer += art_score;
+                    answer += art_score;   
             }
         }
         if(i==4)
             break;
         rotate();
-        // cout << map[1][1];
-        // break;
-
     }
-    // for(int i=1;i<=n;i++)
-    // {
-    //     for(int j=1;j<=n;j++)
-    //     {
-    //         cout << map[i][j];
-    //     }
-    //     cout << endl;
-    // }
+
     cout << answer;
     return 0;
 }
