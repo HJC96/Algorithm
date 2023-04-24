@@ -1,46 +1,36 @@
 #include <string>
+#include <vector>
 #include <queue>
-#include <unordered_set>
+#include <iostream>
 #include <algorithm>
+#include <unordered_set>
 
 using namespace std;
 
-int bfs(int N, int number) {
-    queue<pair<int, int>> q;
+int bfs(int num, int number){
+    queue<pair<int,int>> q;
     q.push({0, 0});
     unordered_set<int> visited;
 
-    while (!q.empty()) {
-        int curr_value = q.front().first;
-        int curr_cnt = q.front().second;
+    while(!q.empty()){
+        int front = q.front().first;
+        int lv = q.front().second;
         q.pop();
+        if(lv >8) return -1;
+        if(front == number) {return lv;}
 
-        if (curr_cnt > 8) {
-            return -1;
-        }
-        
-        if (curr_value == number) {
-            return curr_cnt;
-        }
+        if(visited.find(front) != visited.end()) continue;
+        visited.insert(front);
 
-        if (visited.find(curr_value) != visited.end()) {
-            continue;
-        }
-        visited.insert(curr_value);
-
-        int NN = 0;
-        for (int i = 0; i < 8 - curr_cnt; ++i) {
-            NN = NN * 10 + N;
-            q.push({curr_value + NN, curr_cnt + i + 1});
-            q.push({curr_value - NN, curr_cnt + i + 1});
-            q.push({curr_value * NN, curr_cnt + i + 1});
-            if (curr_value != 0) {
-                q.push({curr_value / NN, curr_cnt + i + 1});
-            }
+        string tmp1 ="";
+        for(int i=0;i<8-lv;i++){
+            tmp1 += to_string(num);
+            q.push({front+stoi(tmp1),lv+i+1});
+            q.push({front-stoi(tmp1),lv+i+1});
+            q.push({front*stoi(tmp1),lv+i+1});
+            q.push({front/stoi(tmp1),lv+i+1});
         }
     }
-
-    return -1;
 }
 
 int solution(int N, int number) {
