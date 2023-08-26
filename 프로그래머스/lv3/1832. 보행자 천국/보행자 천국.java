@@ -16,12 +16,9 @@ class Solution {
                 if(j>=1){
                     if(cityMap[i][j-1] == 0){
                         dp[i][j][0] += (dp[i][j-1][0] + dp[i][j-1][1] ) % MOD;
-//                        if(i>=1)
-//                            dp[i][j][1] += (dp[i-1][j][1]) % MOD;
                     }
                     else if(cityMap[i][j-1] == 1){
-                        dp[i][j][0] = 0;
-//                        dp[i][j][1] = 0;
+                        // dp[i][j][0] = 0;
                     }
                     else{
                         dp[i][j][0] += (dp[i][j-1][0]) % MOD;
@@ -31,13 +28,9 @@ class Solution {
                 if(i>=1){
                     if(cityMap[i-1][j] == 0){
                         dp[i][j][1] += (dp[i-1][j][0]+dp[i-1][j][1]) % MOD;
-//                        if(j>=1)
-//                            dp[i][j][0] += (dp[i][j-1][1]) % MOD;
-
                     }
                     else if(cityMap[i-1][j] == 1){
-//                        dp[i][j][0] = 0;
-                        dp[i][j][1] = 0;
+                        // dp[i][j][1] = 0;
                     }
                     else{
                         dp[i][j][1] += (dp[i-1][j][1]) % MOD;
