@@ -3,25 +3,58 @@ import java.util.*;
 
 class Solution {
     public int solution(String[] lines) {
-        int answer = 0;
-        int []time = new int[240000000];
-        int tmp_max = 0;
+        int []time = new int[236000000];
+        int answer=0;
+        int tmp_answer = 0;
+        List<Integer> start = new ArrayList<>();
+        List<Integer> end = new ArrayList<>();
         for(String line:lines){
             String tmp_1[] = line.split(" ");
             String tmp_2[] = tmp_1[1].split(":");
             String tmp_3[] = tmp_2[2].split("\\.");
-            String dateTime = tmp_2[0]+tmp_2[1]+tmp_3[0]+tmp_3[1];
-            int interval = (int)(Float.parseFloat(tmp_1[2].substring(0,tmp_1[2].length()-1))*1000);
-            int dateTimeInt = Integer.parseInt(dateTime);
-            int start = dateTimeInt - interval;
-            if(start>=240000000) continue;
-            if(start < 0) {start = 0; }
-            for(int i=start;i<=dateTimeInt;i++)
-                tmp_max = ++time[i];
-            answer = Math.max(tmp_max,answer);
-            System.out.println(dateTimeInt);
+            
+            int hour = Integer.parseInt(tmp_2[0]);
+            int minute = Integer.parseInt(tmp_2[1]);
+            int second = Integer.parseInt(tmp_3[0]);
+            int millisecond = Integer.parseInt(tmp_3[1]);
+            
+            int endTime = ((hour * 60 + minute) * 60 + second) * 1000 + millisecond;
+            
+            int processTime = (int)(Float.parseFloat(tmp_1[2].substring(0,tmp_1[2].length()-1))*1000) ;
+            int startTime = endTime - processTime + 1;
+            
+            start.add(startTime);
+            end.add(endTime);
         }
-//        for(int i=0;i<240000000;i+=1000) answer = Math.max(time[i],answer);
+        
+        for(int i=0;i<lines.length;i++){
+            int startRange = end.get(i);
+            int endRange = startRange + 1000;
+
+            int count = 0;
+            for(int j=0;j<lines.length;j++){
+                if(start.get(j) < endRange && end.get(j) >= startRange)
+                {
+                    count++;
+                }
+            }
+            answer = Math.max(answer, count); 
+
+        }
+        
+        for(int i=0;i<lines.length;i++){
+            int startRange = start.get(i);
+            int endRange = startRange + 1000;
+            int count = 0;
+            for(int j=0;j<lines.length;j++){
+                if(start.get(j) < endRange && end.get(j) >= startRange)
+                {
+                    count++;
+                }
+            }
+            answer = Math.max(answer, count); 
+        }
+        
 
         return answer;
     }
