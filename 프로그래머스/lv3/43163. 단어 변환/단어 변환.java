@@ -25,7 +25,7 @@ class Solution {
             visited.put(pair.left,true);
             if(pair.left.equals(target)){ answer = pair.right; break; }
             for(String word:words){
-                if(OneCharDiff(pair.left,word) && !visited.get(word)){
+                if(!visited.get(word) &&OneCharDiff(pair.left,word)){
                     que.add(new Pair<>(word,pair.right+1));
                     visited.put(word,true);  
                 }
