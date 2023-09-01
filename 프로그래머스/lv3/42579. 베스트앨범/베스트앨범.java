@@ -3,63 +3,51 @@ import java.util.*;
 
 class Solution {
     public int[] solution(String[] genres, int[] plays) {
-        List<Integer> tmpAns = new ArrayList<>();
-        
-        boolean [] checkAns = new boolean[plays.length];
-        Arrays.fill(checkAns, false);
+        Map<String, List<Pair>> hashmap = new HashMap<>();
+        for(int i=0;i<genres.length;i++){
+            if(hashmap.get(genres[i]) == null){
+                List<Pair> list = new ArrayList<>();
+                Pair pair = new Pair(plays[i], i);
+                list.add(pair);
+                hashmap.put(genres[i], list);
+            }
+            else{
+                Pair pair = new Pair(plays[i], i);
+                hashmap.get(genres[i]).add(pair);
+            }
+        }
+        List<Map.Entry<String, List<Pair>>> entryList = new ArrayList<>(hashmap.entrySet());
 
-        HashMap<Integer, Integer> indexTbl = new HashMap<>();
-        for(int i=0;i<plays.length;i++){
-            indexTbl.put(plays[i],i);
+        for(List<Pair> list : hashmap.values()){
+            Collections.sort(list, (a, b) -> Integer.compare(b.plays, a.plays));
         }
-        HashMap<String, List<Integer>> hash = new HashMap<>();
-        for(int i=0;i<plays.length;i++){
-            if(hash.containsKey(genres[i])){
-                 hash.get(genres[i]).add(plays[i]);
-            }else{
-                 List<Integer> lis = new ArrayList<>();
-                 lis.add(plays[i]);
-                 hash.put(genres[i],lis);
-            }
-        }
-        HashMap<String, Integer> tbl = new HashMap<>();
-        for(Map.Entry<String, List<Integer>> e: hash.entrySet()){
-              int tmp = 0;
-              for(Integer i: e.getValue())
-                  tmp +=i;
-              tbl.put(e.getKey(), tmp);
-        }
-        List<Map.Entry<String, Integer>> sortedEntries = new ArrayList<>(tbl.entrySet());
-        Collections.sort(sortedEntries, new Comparator<Map.Entry<String, Integer>>() {
-            public int compare(Map.Entry<String, Integer> entry1, Map.Entry<String, Integer> entry2) {
-                return entry2.getValue().compareTo(entry1.getValue()); // 내림차순 정렬
-            }
+
+        Collections.sort(entryList, (a, b) -> {
+            int sumA = a.getValue().stream().mapToInt(pair->pair.plays).sum();
+            int sumB = b.getValue().stream().mapToInt(pair->pair.plays).sum();
+            return Integer.compare(sumB, sumA); 
         });
-        for(Map.Entry<String, Integer> e:sortedEntries){
-             List<Integer> tmp = hash.get(e.getKey());
-             Collections.sort(tmp, new Comparator<Integer>() {
-            public int compare(Integer entry1, Integer entry2) {
-                return entry2-entry1;}});
-             for(int i = 0;i<tmp.size();i++){
-                 if(i==2)
-                      break;
-                 //tmp.get(i) -> 5
-                 for(int j=0;j<plays.length;j++){
-                     if(checkAns[j] == false){
-                        if(plays[j] == tmp.get(i)){
-                            checkAns[j] = true;
-                            tmpAns.add(j);
-                            break;
-                        }
-                     }
-                 }
-            }        
-        }
-        int [] answer=new int[tmpAns.size()];
-        for(int i=0;i<tmpAns.size();i++){
-             answer[i]=tmpAns.get(i);        
+        
+        // hashmap이라는 hashmap 하나에 sort를 쓸 수 있는지.
+        // 쓸 수 있다면, 
+        List<Integer> ans = new ArrayList<>();
+        for(Map.Entry<String, List<Pair>> e:entryList){
+            List<Pair> pairs = e.getValue();
+            int size = Math.min(pairs.size(), 2); // 리스트 크기가 2 미만인 경우를 대비
+            for(int i = 0; i < size; i++) {
+                ans.add(pairs.get(i).number);  // number 필드를 ans에 추가
+    }
         }
         
-        return answer;
+        return ans.stream().mapToInt(i -> i).toArray();
+    }
+}
+
+class Pair{
+    int plays;
+    int number;
+    public Pair(int plays, int number){
+        this.plays = plays;
+        this.number = number;
     }
 }
