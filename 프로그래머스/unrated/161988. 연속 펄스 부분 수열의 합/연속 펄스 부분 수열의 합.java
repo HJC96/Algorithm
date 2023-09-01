@@ -9,8 +9,6 @@ public class Solution {
         long[] dpNeg = new long[length];
 
         
-
-
         int[] purse = new int[length];
         purse[0] = 1;
         for(int i=1;i<length;i++){
@@ -20,16 +18,10 @@ public class Solution {
 
         dpPos[0] = sequence[0];
         dpNeg[0] = sequence[0];
-        answer = Math.max(Math.abs(dpPos[0]), dpNeg[0]);
+        answer = Math.abs(sequence[0]);
         for (int i = 1; i < length; i++) {
-//            if (i % 2 == 0) {
-                dpPos[i] = Math.max(dpPos[i - 1] + sequence[i], sequence[i]);
-                dpNeg[i] = Math.min(dpNeg[i - 1] + sequence[i], sequence[i]);
-//            } else {
-//                dpPos[i] = Math.max(dpPos[i - 1] - sequence[i], -sequence[i]);
-//                dpNeg[i] = Math.max(dpNeg[i - 1] + sequence[i], sequence[i]);
-//            }
-
+            dpPos[i] = Math.max(dpPos[i - 1] + sequence[i], sequence[i]);
+            dpNeg[i] = Math.min(dpNeg[i - 1] + sequence[i], sequence[i]);
             answer = Math.max(answer, Math.max(Math.abs(dpPos[i]), Math.abs(dpNeg[i])));
         }
 
