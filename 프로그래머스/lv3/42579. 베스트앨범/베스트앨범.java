@@ -1,53 +1,60 @@
 import java.io.*;
 import java.util.*;
 
+
 class Solution {
     public int[] solution(String[] genres, int[] plays) {
+        
+        List<Integer> ans = new ArrayList<>();
         Map<String, List<Pair>> hashmap = new HashMap<>();
-        for(int i=0;i<genres.length;i++){
+        /*1. Set HashMap*/
+        int length = genres.length;
+        for(int i=0;i<length;i++){
             if(hashmap.get(genres[i]) == null){
                 List<Pair> list = new ArrayList<>();
                 Pair pair = new Pair(plays[i], i);
                 list.add(pair);
-                hashmap.put(genres[i], list);
-            }
-            else{
-                Pair pair = new Pair(plays[i], i);
-                hashmap.get(genres[i]).add(pair);
+                hashmap.put(genres[i],list);
+            }else{
+                hashmap.get(genres[i]).add(new Pair(plays[i],i));
             }
         }
-        List<Map.Entry<String, List<Pair>>> entryList = new ArrayList<>(hashmap.entrySet());
-
-        for(List<Pair> list : hashmap.values()){
-            Collections.sort(list, (a, b) -> Integer.compare(b.plays, a.plays));
+        /*2. Sort HashMap*/
+        // List<Pair>
+        List<Map.Entry<String, List<Pair>>> list = new ArrayList<>(hashmap.entrySet()); 
+        for(int i=0;i<list.size();i++){
+            Collections.sort(list.get(i).getValue(), (a,b)->
+                             {
+                                 return Integer.compare(b.plays,a.plays);
+                             });
         }
-
-        Collections.sort(entryList, (a, b) -> {
-            int sumA = a.getValue().stream().mapToInt(pair->pair.plays).sum();
-            int sumB = b.getValue().stream().mapToInt(pair->pair.plays).sum();
-            return Integer.compare(sumB, sumA); 
+        Collections.sort(list, (a,b)->{
+            int sumA = a.getValue().stream().mapToInt(i->i.plays).sum();
+            int sumB = b.getValue().stream().mapToInt(i->i.plays).sum();
+            return Integer.compare(sumB, sumA);
         });
-        
-        // hashmap이라는 hashmap 하나에 sort를 쓸 수 있는지.
-        // 쓸 수 있다면, 
-        List<Integer> ans = new ArrayList<>();
-        for(Map.Entry<String, List<Pair>> e:entryList){
-            List<Pair> pairs = e.getValue();
-            int size = Math.min(pairs.size(), 2); // 리스트 크기가 2 미만인 경우를 대비
-            for(int i = 0; i < size; i++) {
-                ans.add(pairs.get(i).number);  // number 필드를 ans에 추가
-    }
+            
+        /*3. Get Answer*/
+        for(Map.Entry<String,List<Pair>> h:list){
+            ans.add(h.getValue().get(0).playNumber);
+            if(h.getValue().size() >= 2)
+                ans.add(h.getValue().get(1).playNumber);
+        }
+        int idx=0;
+        int [] answer = new int[ans.size()];
+        for(int i=0;i<ans.size();i++){
+            answer[i] = ans.get(i);
         }
         
-        return ans.stream().mapToInt(i -> i).toArray();
+        return answer;
     }
 }
 
 class Pair{
     int plays;
-    int number;
-    public Pair(int plays, int number){
+    int playNumber;
+    public Pair(int plays, int playNumber){
         this.plays = plays;
-        this.number = number;
+        this.playNumber = playNumber;
     }
 }
