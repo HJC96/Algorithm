@@ -4,47 +4,55 @@ import java.util.*;
 
 class Solution {
     public int[] solution(String[] genres, int[] plays) {
-        
-        List<Integer> ans = new ArrayList<>();
         Map<String, List<Pair>> hashmap = new HashMap<>();
-        /*1. Set HashMap*/
-        int length = genres.length;
+        
+        int length = plays.length;
         for(int i=0;i<length;i++){
             if(hashmap.get(genres[i]) == null){
-                List<Pair> list = new ArrayList<>();
-                Pair pair = new Pair(plays[i], i);
-                list.add(pair);
-                hashmap.put(genres[i],list);
-            }else{
-                hashmap.get(genres[i]).add(new Pair(plays[i],i));
+                List<Pair> lis = new ArrayList<>();
+                Pair pair = new Pair(plays[i],i);
+                lis.add(pair);
+                hashmap.put(genres[i],lis);
+            }
+            else{
+                Pair pair = new Pair(plays[i],i);
+                hashmap.get(genres[i]).add(pair);
             }
         }
-        /*2. Sort HashMap*/
-        // List<Pair>
-        List<Map.Entry<String, List<Pair>>> list = new ArrayList<>(hashmap.entrySet()); 
-        for(int i=0;i<list.size();i++){
-            Collections.sort(list.get(i).getValue(), (a,b)->
-                             {
-                                 return Integer.compare(b.plays,a.plays);
-                             });
+        List<Map.Entry<String, List<Pair>>> hashmapList = new ArrayList<>();
+        for(Map.Entry<String, List<Pair>>e:hashmap.entrySet()){
+            Collections.sort(e.getValue(), (a, b)->{
+               return Integer.compare(b.plays,a.plays);
+            });
+            hashmapList.add(e);
         }
-        Collections.sort(list, (a,b)->{
-            int sumA = a.getValue().stream().mapToInt(i->i.plays).sum();
-            int sumB = b.getValue().stream().mapToInt(i->i.plays).sum();
-            return Integer.compare(sumB, sumA);
-        });
+        Collections.sort(hashmapList, (a,b)->{
+            int sumA = 0;
+            int sumB = 0;
+            for(Pair p:a.getValue()){
+                sumA += p.plays;
+            }
             
-        /*3. Get Answer*/
-        for(Map.Entry<String,List<Pair>> h:list){
-            ans.add(h.getValue().get(0).playNumber);
-            if(h.getValue().size() >= 2)
-                ans.add(h.getValue().get(1).playNumber);
+            for(Pair p:b.getValue()){
+                sumB += p.plays;
+            }
+            // int sumA = a.getValue().stream().sum(i.plays->i.plays);
+            // int sumB = b.getValue().stream();
+            
+           return Integer.compare(sumB,sumA); 
+        });
+        
+        List<Integer> ans = new ArrayList<>();
+        for(Map.Entry<String, List<Pair>> m:hashmapList){
+            ans.add(m.getValue().get(0).play_no);
+            if(m.getValue().size()>=2) ans.add(m.getValue().get(1).play_no);
         }
+        
+        int[] answer = new int[ans.size()];
         int idx=0;
-        int [] answer = new int[ans.size()];
-        for(int i=0;i<ans.size();i++){
-            answer[i] = ans.get(i);
-        }
+        for(int i:ans) answer[idx++] = i;
+
+        
         
         return answer;
     }
@@ -52,9 +60,9 @@ class Solution {
 
 class Pair{
     int plays;
-    int playNumber;
-    public Pair(int plays, int playNumber){
+    int play_no;
+    public Pair(int plays, int play_no){
         this.plays = plays;
-        this.playNumber = playNumber;
+        this.play_no = play_no;
     }
 }
