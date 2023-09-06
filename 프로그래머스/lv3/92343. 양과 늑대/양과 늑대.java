@@ -1,48 +1,43 @@
 import java.io.*;
 import java.util.*;
 
+
 class Solution {
-
-    static List<List<Integer>> graph = new ArrayList<>();
-
-    public int dfs(int wolf, int sheep, int CurrNode, List<Integer> nextNodes, int[] info){
-        if(info[CurrNode] == 0) sheep++;
-        else wolf++;
+    
+    List<List<Integer>> graph = new ArrayList<>();
+    
+    public int dfs(int s, int w, int curNode, List<Integer> nextNodes, int[] info){
+        if(info[curNode] == 0) s++;
+        else w++;
         
-        int ans = sheep;
-        if(sheep <= wolf)
-            return ans;
+        int ans = s;
+        if(s <= w) return ans;
         
         for(int i=0;i<nextNodes.size();i++){
-            List<Integer> stackNode = new ArrayList<>(nextNodes);
             int nextNode = nextNodes.get(i);
-            stackNode.remove((Integer)nextNode);
-            stackNode.addAll(graph.get(nextNode));
-            
-            
-            ans = Math.max(ans, dfs(wolf, sheep, nextNode, stackNode, info));
-            
+            List<Integer> stackNodes = new ArrayList<>(nextNodes);
+            stackNodes.remove((Integer)nextNode);
+            stackNodes.addAll(graph.get(nextNode));
+            ans = Math.max(ans, dfs(s, w, nextNode,stackNodes,info));
         }
         return ans;
     }
     
     public int solution(int[] info, int[][] edges) {
-        int graphLength = info.length;
-        
-        for(int i=0;i<graphLength;i++){
-            graph.add(new ArrayList<>());
+        int answer = 0;
+        int length = info.length;
+        for(int i=0;i<length;i++){
+            graph.add((new ArrayList<>()));
         }
         
-        int edgeLength = edges.length;
-        for(int i=0;i<edgeLength;i++){
-            graph.get(edges[i][0]).add(edges[i][1]);
+        for(int[] edge:edges){
+            graph.get(edge[0]).add(edge[1]);
         }
         
-        List<Integer> st = new ArrayList<>();
-        for (int i : graph.get(0)) {
-            st.add(i);
+        List<Integer> nextNodes = new ArrayList<>();        
+        for(int i:graph.get(0)){
+            nextNodes.add(i);
         }
-        
-        return dfs(0, 0, 0, st, info);
+        return dfs(0, 0, 0, nextNodes, info);
     }
 }
