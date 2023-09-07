@@ -1,63 +1,56 @@
 import java.io.*;
 import java.util.*;
 
-class Solution {
-    int INFINITY = 999999999;
-    static List<List<Integer>> graph = new ArrayList<>();
-    static Map<Integer, Integer> hashDistance = new HashMap<>();
-    
-   
 
+class Solution {
+    int INFINITY = 99999999;
     public int solution(int n, int[][] edge) {
         int answer = 0;
+        Map<Integer, Integer> hashData = new HashMap<>();
+        List<List<Integer>> nodes = new ArrayList<>();
         
-        /* Set Graph */
         for(int i=0;i<=n;i++){
-            graph.add(new ArrayList<>());
-            hashDistance.put(i,INFINITY);
+            nodes.add(new ArrayList<>());
+            hashData.put(i,INFINITY);
         }
-        hashDistance.put(0,0);
-        int edgeLength = edge.length;
-        for(int i=0;i<edgeLength;i++){
-            graph.get(edge[i][0]).add(edge[i][1]);
-            graph.get(edge[i][1]).add(edge[i][0]);
-        }
-
-
+        hashData.put(0,0);
         
-        /* BFS */
+        for(int[] e:edge){
+            nodes.get(e[0]).add(e[1]);
+            nodes.get(e[1]).add(e[0]);
+        }
+        
         Queue<Pair> que = new LinkedList<>();
         que.add(new Pair(1,0));
         
         while(!que.isEmpty()){
-            Pair pair = que.poll();
-            if(hashDistance.get(pair.node) > pair.distance){
-                hashDistance.put(pair.node, pair.distance);
+            Pair p = que.poll();
+            if(hashData.get(p.node) > p.distance){
+                hashData.put(p.node, p.distance);
             }else{
                 continue;
             }
-            for(int i=0;i<graph.get(pair.node).size();i++){
-                int next = graph.get(pair.node).get(i);
-                Pair p = new Pair(next, pair.distance+1);
-                if(hashDistance.get(next) > pair.distance+1) que.add(p);
+            int len = nodes.get(p.node).size();
+            for(int i=0;i<len;i++){
+                int nextNode = nodes.get(p.node).get(i);
+                que.add(new Pair(nextNode, p.distance+1));
             }
         }
-        
-        /* Find Answer */
-        List<Map.Entry<Integer, Integer>> lists = new ArrayList<>();
-        for(Map.Entry<Integer, Integer> e:hashDistance.entrySet()){
-            lists.add(e);
+        List<Map.Entry<Integer, Integer>> lis = new ArrayList<>();
+        for(Map.Entry<Integer, Integer> m:hashData.entrySet()){
+            lis.add(m);
         }
         
-        Collections.sort(lists, (a,b)->{
+        Collections.sort(lis, (a,b)->{
             return Integer.compare(a.getValue(),b.getValue());
         });
         
-        int lastValue = (int)lists.get(lists.size()-1).getValue();
-        for(int i=lists.size()-1;i>=0;i--){
-            if(lastValue != lists.get(i).getValue()) break;
+        int tmp = lis.get(lis.size()-1).getValue();
+        for(int i=lis.size()-1;i>=0;i--){
+            if(tmp != lis.get(i).getValue()) break;
             answer++;
         }
+        
         return answer;
     }
 }
@@ -70,13 +63,3 @@ class Pair{
         this.distance = distance;
     }
 }
-
-/*
-        1 2 3
-        2 1 3 4 5
-        3 1 2 4 6
-        4 2 3 
-        5 2
-        6 3
- */      
-        
