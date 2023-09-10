@@ -1,44 +1,42 @@
-public class Solution {
+import java.io.*;
+import java.util.*;
+
+class Solution {
     public int solution(int n, int[][] results) {
-        boolean[][] wins = new boolean[n+1][n+1];
-        boolean[][] loses = new boolean[n+1][n+1];
-        
-        for(int[] result : results) {
+        boolean [][] wins = new boolean[n+1][n+1];
+        boolean [][] loses = new boolean[n+1][n+1];
+        int answer = 0;
+        for(int[] result:results){
             wins[result[0]][result[1]] = true;
             loses[result[1]][result[0]] = true;
         }
 
-        for(int i=1; i<=n; i++) {
-            for(int j=1; j<=n; j++) {
-                if(wins[i][j]) {
-                    for(int k=1; k<=n; k++) {
-                        if(wins[j][k]) {
-                            wins[i][k] = true;
-                            loses[k][i] = true;
-                        }
-                    }
-                }
 
-                if(loses[i][j]) {
-                    for(int k=1; k<=n; k++) {
-                        if(loses[j][k]) {
-                            loses[i][k] = true;
-                            wins[k][i] = true;
-                        }
+        for(int i=1;i<n+1;i++){
+            for(int j=1;j<n+1;j++){
+                for(int k=1;k<n+1;k++){
+                    if((wins[i][k] == true) && (wins[k][j] == true)) {
+                        wins[i][j] = true;
+                        loses[j][i] = true;
+                    }
+                    if((loses[i][k] == true) && (loses[k][j] == true)) {
+                        wins[j][i] = true;
+                        loses[i][j] = true;
                     }
                 }
             }
         }
 
-        int answer = 0;
-        for(int i=1; i<=n; i++) {
-            int count = 0;
-            for(int j=1; j<=n; j++) {
-                if(wins[i][j] || loses[i][j]) count++;
+        for(int i=1;i<n+1;i++){
+            int tmpNumber = 0;
+            for(int j=1;j<n+1;j++){
+                if((loses[i][j] == true) || (wins[i][j] == true)) tmpNumber++;
             }
-            if(count == n-1) answer++;
+            if(tmpNumber == n-1) answer++;
         }
-        
+
+
+
         return answer;
     }
 }
