@@ -2,38 +2,51 @@ import java.io.*;
 import java.util.*;
 
 class Solution {
-    List<Set<Integer>> sets = new ArrayList<>();
-
     public int solution(int N, int number) {
-        int answer = -1;
-        String tmp = "";
+        int answer = 0;
+        List<Set<Integer>> set = new ArrayList<>();
+        String num="";
         for(int i=0;i<=8;i++){
-            sets.add(new HashSet<>());
-            if(i>=1){
-                tmp += N;
-                sets.get(i).add(Integer.parseInt(tmp));        
-            }
+            set.add(new HashSet<>());
+            if(i>=1)
+                set.get(i).add(Integer.parseInt(num));
+            num+=N;
         }
-        sets.get(0).add(0);
         
         for(int i=2;i<=8;i++){
-            for(int j=1;j<i;j++){
-                for(int cur:sets.get(i-j)){
-                    for(int val:sets.get(j)){
-                        sets.get(i).add(cur+val);
-                        sets.get(i).add(cur-val);
-                        sets.get(i).add(cur*val);
-                        if(val!=0)
-                            sets.get(i).add(cur/val);
-                        // sets.get(i).add(cur*10 + val);
+            for(int j=1;j<=i-1;j++){
+                for(int k:set.get(j)){
+                    for(int l:set.get(i-j)){
+                       set.get(i).add(k+l);
+                       set.get(i).add(k-l);
+                       set.get(i).add(k*l);
+                       if(l !=0)
+                        set.get(i).add(k/l);
                     }
-                }
+               }
             }
         }
-        for(int i=0;i<=8;i++){
-            if(sets.get(i).contains(number)) {answer = i; break;}
+        
+        for(int i=1;i<=8;i++){
+            if(set.get(i).contains(number)) return i;
         }
-
-        return answer;
+                    
+        
+        
+        
+        return -1;
     }
 }
+
+/*
+1. 5 세개로 만들 수 있는 수...
+5 1개 만들수 있는 경우 + 2개로 만들 수 있는 경우의 수
+
+
+
+
+
+
+
+*/
+
