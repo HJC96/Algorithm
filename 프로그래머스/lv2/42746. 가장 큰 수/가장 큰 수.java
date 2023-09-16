@@ -1,21 +1,25 @@
+import java.io.*;
 import java.util.*;
+
 
 class Solution {
     public String solution(int[] numbers) {
+        
+        List<String> ansList = new ArrayList<>();
+        
+        for(int i:numbers){
+            String answer = "";
+            ansList.add(answer + i);
+        }
+        
+        Collections.sort(ansList, (a,b)->{
+           return Integer.compare(Integer.parseInt(b+a),Integer.parseInt(a+b));
+        });
+        
         String answer = "";
-        List<String> ans = new ArrayList<>();
-        
-        for(int num : numbers)
-            ans.add(Integer.toString(num));
-            
-        Collections.sort(ans, (a, b) -> (b + a).compareTo(a + b));
-        
-        if(ans.get(0).equals("0"))
-            return "0";
-            
-        for(String str : ans)
-            answer += str;
-            
-        return answer;
+        for(String s:ansList)
+            answer +=s;
+        if(answer.charAt(0)=='0') return "0";
+        else return answer;
     }
 }
