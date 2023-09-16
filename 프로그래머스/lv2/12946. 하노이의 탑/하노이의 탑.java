@@ -2,24 +2,35 @@ import java.io.*;
 import java.util.*;
 
 class Solution {
-    List<List<Integer>> res = new ArrayList<>();
-    
-    void hanoi(int numOfCircle, int from, int to, int other){
-        if(numOfCircle == 0) return;
-        hanoi(numOfCircle-1,from, other,to);
-        List<Integer> l = new ArrayList<>();
-        l.add(from); l.add(to);
-        res.add(l);
-        hanoi(numOfCircle-1,other, to,from);
+    List<List<Integer>> path = new ArrayList<>();
+    List<Integer> p = new ArrayList<>();
+    void dfs(int numOfCircle,int curNode, int otherNode, int targetNode){
+        List<Integer> tmpAns = new ArrayList<>();
+        if(numOfCircle == 0) {
+            // p.add(curNode);
+            return;
+        }
+        dfs(numOfCircle-1, curNode, targetNode, otherNode);
+        tmpAns.add(curNode);
+        tmpAns.add(targetNode);
+        path.add(tmpAns);
+        // System.out.println(curNode);
+        dfs(numOfCircle-1, otherNode, curNode,targetNode);
+        
     }
     
     public int[][] solution(int n) {
-        hanoi(n, 1, 3, 2);
-        int[][] answer = new int[res.size()][2];
-        for(int i=0;i<res.size();i++){
-            for(int j=0;j<2;j++){
-                answer[i][j] = res.get(i).get(j);
+        
+        
+        dfs(n, 1, 2, 3);
+        int idx=0;
+        int[][] answer = new int[path.size()][2];
+        for(List<Integer> p:path){
+            int tmp=0;
+            for(int i:p){
+                answer[idx][tmp++] = i;
             }
+            idx+=1;
         }
         return answer;
     }
