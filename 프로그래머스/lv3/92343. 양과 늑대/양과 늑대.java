@@ -1,43 +1,49 @@
 import java.io.*;
 import java.util.*;
 
-
 class Solution {
-    
-    List<List<Integer>> graph = new ArrayList<>();
-    
-    public int dfs(int s, int w, int curNode, List<Integer> nextNodes, int[] info){
-        if(info[curNode] == 0) s++;
-        else w++;
-        
-        int ans = s;
-        if(s <= w) return ans;
+    int answer = 0;
+    Map<Integer, List<Integer>> hashmap = new HashMap<>(); 
+    void dfs(int wolf, int sheep, int curNode, List<Integer> nextNodes, int[] info){
+        if(info[curNode] == 0) sheep++;
+        else wolf++;
+        if(wolf>=sheep){
+            answer = Math.max(answer, sheep);
+            return;
+        }
         
         for(int i=0;i<nextNodes.size();i++){
             int nextNode = nextNodes.get(i);
             List<Integer> stackNodes = new ArrayList<>(nextNodes);
             stackNodes.remove((Integer)nextNode);
-            stackNodes.addAll(graph.get(nextNode));
-            ans = Math.max(ans, dfs(s, w, nextNode,stackNodes,info));
+            for(int num:hashmap.get(nextNode))
+                stackNodes.add(num);   
+            dfs(wolf,sheep,nextNode,stackNodes,info);
         }
-        return ans;
+        answer = Math.max(answer, sheep);
     }
     
     public int solution(int[] info, int[][] edges) {
-        int answer = 0;
-        int length = info.length;
-        for(int i=0;i<length;i++){
-            graph.add((new ArrayList<>()));
-        }
         
-        for(int[] edge:edges){
-            graph.get(edge[0]).add(edge[1]);
+        /* Make Graph */
+        int len = info.length;
+        for(int i=0;i<len;i++)
+            hashmap.put(i, new ArrayList<>());
+        for(int[] e:edges){
+            if(hashmap.get(e[0]) == null){
+                List<Integer> lis = new ArrayList<>();
+                lis.add(e[1]);
+                hashmap.put(e[0],lis);
+            }else{
+                hashmap.get(e[0]).add(e[1]);
+            }
         }
+        List<Integer> nextNodes = new ArrayList<>();
+        nextNodes.addAll(hashmap.get(0));
+        /* Logic */
+        dfs(0,0,0,nextNodes,info);
         
-        List<Integer> nextNodes = new ArrayList<>();        
-        for(int i:graph.get(0)){
-            nextNodes.add(i);
-        }
-        return dfs(0, 0, 0, nextNodes, info);
+        
+        return answer;
     }
 }
