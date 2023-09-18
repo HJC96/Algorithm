@@ -1,53 +1,60 @@
 import java.io.*;
 import java.util.*;
 
+
 class Solution {
-    int [][] graph;
     Map<Integer, Integer> hashMap = new HashMap<>();
-    public void dfs(int y, int x, int lastY, int lastX, int size){
-        boolean checkFlag = true;
-        int tmpNumber = graph[y][x];
-        /* Check Quad (Total) */
-        for(int i=y;i<lastY;i++){
-            for(int j=x;j<lastX;j++){
-                if(tmpNumber != graph[i][j]) {
-                    checkFlag = false;
-                    break;
+    void dfs(int startY, int startX, int endY, int endX, int[][] arr){
+        
+        boolean checkQuad = true;
+        /* Check Quad */
+        for(int i=startY;i<endY;i++){
+            for(int j=startX;j<endX;j++){
+                if(j+1 < endX){
+                    if(arr[i][j] != arr[i][j+1]){
+                        checkQuad = false;
+                        break;
+                    }
+                }
+                if(i+1 < endY){
+                    if(arr[i][j] != arr[i+1][j]){
+                        checkQuad = false;
+                        break;
+                    }
                 }
             }
-            if(!checkFlag) break;
         }
-        /* If Quad ? return */
-        if(checkFlag) {
-            hashMap.put(tmpNumber,hashMap.get(tmpNumber)+1);
+        /*  */
+        if(checkQuad){
+            hashMap.put(arr[startY][startX], hashMap.get(arr[startY][startX])+1);
             return;
         }
-        /* If Atomic ? count */
-        if(size==2){
-            for(int i=y;i<lastY;i++){
-                for(int j=x;j<lastX;j++){
-                    hashMap.put(graph[i][j],hashMap.get(graph[i][j])+1);
+        /* if atomic */
+        if(endY - startY <=1){
+            for(int i=startY;i<endY;i++){
+                for(int j=startX;j<endX;j++){
+                    hashMap.put(arr[i][j], hashMap.get(arr[i][j])+1);
                 }
             }
             return;
         }
-        /* Slice */
-        /* y, x means offset*/
-        dfs(y,x,(y+lastY)/2,(x+lastX)/2, size/2);
-        dfs((y+lastY)/2,x,lastY,(lastX+x)/2, size/2);
-        dfs(y,(x+lastX)/2,(y+lastY)/2,lastX, size/2);
-        dfs((y+lastY)/2,(x+lastX)/2, lastY, lastX, size/2);
-
+        
+        dfs(startY, startX, (startY+endY)/2, (startX+endX)/2, arr);
+        dfs((startY+endY)/2, startX, endY, (startX+endX)/2, arr);
+        dfs(startY, (startX+endX)/2, (startY+endY)/2, endX, arr);
+        dfs((startY+endY)/2, (startX+endX)/2, endY, endX, arr);
+        
     }
-
+    
+    
+    
     public int[] solution(int[][] arr) {
-        int[] answer = new int [2];
+
+        int len = arr.length;
         hashMap.put(0,0);
         hashMap.put(1,0);
-        graph = arr;
-        dfs(0,0,arr[0].length,arr[0].length, arr[0].length);
-        answer[0] = hashMap.get(0);
-        answer[1] = hashMap.get(1);
+        dfs(0, 0, len, len, arr);
+        int[] answer = new int[]{hashMap.get(0),hashMap.get(1)};        
         return answer;
     }
 }
