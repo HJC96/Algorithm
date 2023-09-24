@@ -1,4 +1,3 @@
-~~~java
 import java.io.*;
 import java.util.*;
 
@@ -187,4 +186,4 @@ class Ladder{
 
 
 */
-~~~
+
