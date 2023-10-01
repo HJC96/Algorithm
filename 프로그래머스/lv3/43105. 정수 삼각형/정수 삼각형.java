@@ -13,6 +13,7 @@ class Solution {
                    map[i][j] = Math.max(map[i-1][j-1],map[i-1][j]) + triangle[i][j];
                     if(map[i][j] >= answer) answer = Math.max(answer, map[i][j]);
                 }
+                
                 else{
                     if(j==0)
                         map[i][j] = map[i-1][j] + triangle[i][j];
