@@ -11,7 +11,7 @@ class Solution {
             }
             return;
         }
-        DFS(cur_int + n[idx],target,n,idx+1);
-        DFS(cur_int - n[idx],target,n,idx+1);
+        DFS(cur_int+n[idx],target,n,idx+1);
+        DFS(cur_int-n[idx],target,n,idx+1);
     }
 }
