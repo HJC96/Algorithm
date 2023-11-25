@@ -9,6 +9,7 @@ class Solution {
         for (char type : types) {
             hashMap.put(type, 0);
         }
+        
         for(int i=0;i< survey.length;i++){
             int value = choices[i]-4;
             if(value == 0){
@@ -20,40 +21,29 @@ class Solution {
                 hashMap.put(survey[i].charAt(0), hashMap.get(survey[i].charAt(0)) + Math.abs(value));
             }
         }
+        
         String answer = "";
         
-        if(hashMap.get('R') > hashMap.get('T')){
+        /* Set '=' because problem requires dictionary order */
+        if(hashMap.get('R') >= hashMap.get('T')){
             answer += 'R';
-        }
-        else if(hashMap.get('R') == hashMap.get('T')){
-            answer += 'R';
-        }
-        else{
+        }else{
             answer += 'T';
         }
 
-        if(hashMap.get('C') > hashMap.get('F')){
+        if(hashMap.get('C') >= hashMap.get('F')){
             answer += 'C';
-        }
-        else if(hashMap.get('C') == hashMap.get('F')){
-            answer += 'C';
-        }
-        else{
+        }else{
             answer += 'F';
         }
 
-        if(hashMap.get('J') > hashMap.get('M')){
+        if(hashMap.get('J') >= hashMap.get('M')){
             answer += 'J';
-        }else if(hashMap.get('J') == hashMap.get('M')){
-            answer += 'J';
-        }
-        else{
+        }else{
             answer += 'M';
         }
 
-        if(hashMap.get('A') > hashMap.get('N')){
-            answer += 'A';
-        }else if(hashMap.get('A') == hashMap.get('N')){
+        if(hashMap.get('A') >= hashMap.get('N')){
             answer += 'A';
         }
         else{
