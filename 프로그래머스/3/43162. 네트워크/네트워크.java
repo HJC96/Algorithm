@@ -5,7 +5,7 @@ class Solution {
     boolean [] visited;
     List<List<Integer>> computer;
     int answer = 1;
-    int change = 0;
+    boolean connectedCheck = true;
     public int solution(int n, int[][] computers) {
 
         visited = new boolean[computers[0].length];
@@ -26,14 +26,12 @@ class Solution {
         for(int i=0;i<n;i++){
             dfs(i);
             for(int j=0;j<n;j++){
-                if(visited[j] == false && change == 1) {
+                if(visited[j] == false && connectedCheck == true) {
                     answer++;
                     break;
-                }else{
-                    
                 }
             }
-            change = 0;
+            connectedCheck = false;
         }
         return answer;
     }
@@ -43,7 +41,7 @@ class Solution {
         for(int i:computer.get(num)){
             dfs(i);
         }
-        change = 1;
+        connectedCheck = true;
     }
 }
 
