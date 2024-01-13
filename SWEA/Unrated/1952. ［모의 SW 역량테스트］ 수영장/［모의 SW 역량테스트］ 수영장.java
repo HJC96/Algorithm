@@ -10,7 +10,7 @@ class Solution
 
         for(int test_case = 1; test_case <= T; test_case++)
         {
-int answer = 999999999;
+	    int answer = Integer.MAX_VALUE;
             int[] price = new int[5];
             for(int i=1;i<=4;i++){
                 price[i]=sc.nextInt();
