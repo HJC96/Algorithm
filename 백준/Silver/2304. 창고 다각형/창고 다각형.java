@@ -13,7 +13,12 @@ public class Main {
         int N = Integer.parseInt(br.readLine());
         List<Garage> garageList = new ArrayList<>();
         int maxH = 0; // 가장 높은 기둥
-        int maxHL = 0;
+        int answer = 0;
+        // 가장 높은 기둥이 둘 이상일 수도 있으니, 이때를 고려
+        int a1 = 0, b1 = 0;
+        // 현재 기둥 높이
+        int curH = 0;
+
         for(int i=0;i<N;i++){
             String[] line = br.readLine().split(" ");
             garageList.add(new Garage(Integer.parseInt(line[0]), Integer.parseInt(line[1])));
@@ -30,12 +35,6 @@ public class Main {
             }
         });
 
-        int answer = 0;
-
-        int a1 = 0, b1 = 0;
-        // 현재 기둥 높이
-        int curH = 0;
-
         // 가장 높은 기둥이 될때까지, 현재 기둥보다 값이 높을때만 업데이트 해준다
         for(int i=0;i<N;i++){
             if(garageList.get(i).getH() == maxH) {
@@ -51,7 +50,7 @@ public class Main {
 
         curH=0;
         // 가장 높은 기둥이 될때까지, 현재 기둥보다 값이 높을때만 업데이트 해준다
-        for(int i= garageList.size()-1;i>=maxHL;i--){
+        for(int i= garageList.size()-1;i>=0;i--){
             if(garageList.get(i).getH() == maxH) {
                 b1 = garageList.get(i).getL();
                 break;
@@ -61,15 +60,9 @@ public class Main {
             }
             answer += (garageList.get(i).getL()-garageList.get(i-1).getL())*curH;
         }
-
+        // 가장 높은 기둥의 경우 따로 처리
         answer += (b1-a1+1)*maxH;
-
         System.out.println(answer);
-
-
-
-
-
     }
 }
 
