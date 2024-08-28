@@ -1,50 +1,88 @@
-import java.io.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class Main {
-    public static void main(String[] args) throws IOException{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
-        int answer = 0;
-        String [][] arr = new String[N][];
-        for(int i=0;i<N;i++){
-            arr[i] = br.readLine().split(" ");
+    private static int answer = 0;
+    private static int[][] numbers;
+    private static int N;
+    public static void main(String[] args) throws IOException {
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            N = Integer.parseInt(br.readLine());
+            numbers = new int[N][3];
+            for(int i=0;i<N;i++){
+                String[] input = br.readLine().split(" ");
+                numbers[i][0] = Integer.parseInt(input[0]);
+                numbers[i][1] = Integer.parseInt(input[1]);
+                numbers[i][2] = Integer.parseInt(input[2]);
+            }
+            curr(100, 0);
+
+            System.out.println(answer);
         }
-        for(int i=1;i<=9;i++){
-            for(int j=1;j<=9;j++){
-                for(int k=1;k<=9;k++){
-                    if((i==j) || (j==k) || (k==i)){
-                        continue;
-                    }
-                    String number1 = ""+i+j+k;
 
+        private static void curr(int number, int count){
+        
+            if(number == 1000){
+                return;
+            }
 
-                    for(int m=0;m<N;m++) {
-                        int strike = 0;
-                        int ball = 0;
-                        String number2 = arr[m][0];
-                        Set<Integer> dup = new HashSet<>();
-                        // strike 개수 세기
-                        for (int l = 0; l < 3; l++) {
-                            int target1 = number1.charAt(l) - '0';
-                            int target2 = number2.charAt(l) - '0';
-                            if(target1 == target2) strike++;
+            if(count == N){
+                answer+=1;
+                curr(number+1, 0);
+                return;
+            }
+            int A = number/100;
+            int B = (number%100)/10;
+            int C = (number%10);
 
-                            dup.add(target1);
-                            dup.add(target2);
-                        }
-                        // ball 개수 세기
-                        ball = 6 - dup.size() - strike;
-                        if(strike != Integer.parseInt(arr[m][1]) || ball != Integer.parseInt(arr[m][2])){
-                            break;
-                        }
-                        if(m==N-1) answer++;
-                    }
-                }
+            if(A == B || A == C || B == C){
+                curr(number+1, 0);
+                return;
+            }
+            if(A== 0 || B == 0 || C == 0){
+                curr(number+1, 0);
+                return;
+            }
+            int hintA = numbers[count][0]/100;
+            int hintB = (numbers[count][0]%100)/10;
+            int hintC = (numbers[count][0]%10);
+
+            boolean pass = false;
+            int strike = 0;
+            int ball = 0;
+            if(A == hintA){
+                strike++;
+            }
+            if(B == hintB){
+                strike++;
+            }
+            if(C == hintC){
+                strike++;
+            }
+            if(A == hintB || A == hintC){
+                ball++;
+            }
+            if(B == hintA || B == hintC){
+                ball++;
+            }
+            if(C == hintA || C == hintB){
+                ball++;
+            }
+            if(strike == numbers[count][1] && ball == numbers[count][2]){
+                pass = true;
+            }
+            // if 힌트가 맞으면
+            if(pass) {
+                curr(number, count + 1);
+            }// 힌트가 맞지 않으면
+            else{
+                curr(number+1, 0);
             }
         }
-        System.out.println(answer);
     }
-}
 
