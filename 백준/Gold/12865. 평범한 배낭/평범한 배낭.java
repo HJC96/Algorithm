@@ -18,41 +18,25 @@ public class Main {
         N = Integer.parseInt(line[0]);
         K = Integer.parseInt(line[1]);
 
-        numbers = new int[N][2];
-        dp = new int[N][K+1];
-        for(int i=0;i<K+1;i++){
-            for(int j=0;j<N;j++){
-                dp[j][i] = -1;
-            }
-        }
-        for(int i=0;i<N;i++){
+        numbers = new int[N+1][2];
+        dp = new int[N+1][K+1];
+
+        for(int i=1;i<=N;i++){
             String[] input = br.readLine().split(" ");
             numbers[i][0] = Integer.parseInt(input[0]);
             numbers[i][1] = Integer.parseInt(input[1]);
+        }
+        for(int i=1;i<=N;i++){
+            for(int j=1;j<=K;j++) { // dp가 이차원이면 for문도 2개, j == 현재 가방의 무게
+                if(j<numbers[i][0]){
+                    dp[i][j] = dp[i-1][j];  // 담을수 없는 경우, 담기전 값으로 유지
+                }else{
+                    dp[i][j] = Math.max(dp[i-1][j], dp[i-1][j-numbers[i][0]] + numbers[i][1]); // 담을 수 있으면 무조건 담는다, 이때 이전까지의 아이템가치와 현 아이템 무게 + 이전 차수에서 현아이템 무게 전까지 합 중 최대 가치를 비교해봄
+                }
+            }
 
         }
-
-        int ans = curr(0, 0);
-
-        System.out.println(ans);
-    }
-
-    private static int curr(int weight, int level){
-        if(weight >K){
-            return -999999;
-        }
-        if(level==N){
-            return 0;
-        }
-
-        if(dp[level][weight] != -1){
-            return dp[level][weight];
-        }
-
-
-        dp[level][weight] = Math.max(curr(weight + numbers[level][0] , level+1) + numbers[level][1], curr(weight, level+1)); // 선택하지 않고, 넘김
-
-        return dp[level][weight];
+        System.out.println(dp[N][K]);
     }
 }
 
