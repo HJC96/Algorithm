@@ -1,17 +1,26 @@
 class Solution {
-    int answer = 0;
+    int[] nums;
+    int T;
+    int ans=0;
     public int solution(int[] numbers, int target) {
-        DFS(0,target,numbers, 0);
-        return answer;
+        nums = numbers;
+        T = target;
+        dfs(0, 0);
+        return ans;
     }
-    public void DFS(int cur_int,int target,int[] n, int idx){
-        if(idx == n.length){
-            if(cur_int == target){ 
-                answer++;
-            }
+    
+    void dfs(int idx, int sum){
+        if(sum == T && nums.length == idx){
+            ans++;
             return;
         }
-        DFS(cur_int+n[idx],target,n,idx+1);
-        DFS(cur_int-n[idx],target,n,idx+1);
+        
+        if(idx == nums.length){
+            return;
+        }
+        
+        dfs(idx+1, sum+nums[idx]);
+        dfs(idx+1, sum-nums[idx]);
     }
+    
 }
