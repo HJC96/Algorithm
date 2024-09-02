@@ -15,41 +15,39 @@ public class Main {
         String[] line = br.readLine().split(" ");
         int r = Integer.parseInt(line[0]);
         int c = Integer.parseInt(line[1]);
-        char[][] graph = new char[r+1][c+1];  // r+1, c+1 대신 정확한 크기 사용
-
-        for (int i = 0; i < r; i++) {
-            String tmp = br.readLine();  // 문자열을 분할하지 않고 직접 읽음
-            for (int j = 0; j < c; j++) {
-                graph[i][j] = tmp.charAt(j);  // 문자열에서 직접 문자 추출
+        char graph[][] = new char[r+1][c+1];
+        for(int i=0;i<r;i++){
+            String[] tmp = br.readLine().split("");
+            for(int j=0;j<c;j++){
+                graph[i][j] = tmp[j].charAt(0);
             }
         }
 
         int answer = 0;
         boolean [][]visited;
-        int [][] dist;
         for(int i=0;i<r;i++){
             for(int j=0;j<c;j++){
                 if(graph[i][j] == 'W') continue;
                 visited = new boolean[r+1][c+1];
-                dist = new int[r+1][c+1];
+
+                Queue<Position> q = new LinkedList<>();
+                q.offer(new Position(i,j, 0));
                 visited[i][j] = true;
-                Queue<int[]> q = new LinkedList<>();
-                q.offer(new int[]{i, j});
                 while (!q.isEmpty()){
-                    int[] cur = q.poll();
-                    visited[cur[0]][cur[1]] = true;
+                    Position cur = q.poll();
+                    visited[cur.x][cur.y] = true;
                     for(int k=0;k<4;k++){
-                        int newX = cur[0] + dx[k];
-                        int newY = cur[1] + dy[k];
+                        int newX = cur.x +dx[k];
+                        int newY = cur.y +dy[k];
                         if(newX < 0 || newY < 0 || newX >= r|| newY >= c) continue;
                         if(graph[newX][newY] == 'W') continue;
                         if(visited[newX][newY]) continue;
                         visited[newX][newY] = true;
-                        q.add(new int[]{newX, newY});
-                        dist[newX][newY] = dist[cur[0]][cur[1]] + 1;
-                        answer = Math.max(dist[newX][newY], answer);
+                        q.add(new Position(newX, newY, cur.l+1));
                     }
+                    answer = Math.max(answer, cur.l);
                 }
+
             }
         }
 
@@ -58,7 +56,7 @@ public class Main {
         System.out.println(answer);
     }
 }
-/*
+
 class Position{
     int x;
     int y;
@@ -69,4 +67,3 @@ class Position{
         this.l = l;
     }
 }
-*/
