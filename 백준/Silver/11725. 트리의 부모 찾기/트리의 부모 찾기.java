@@ -39,11 +39,9 @@ public class Main {
     }
 
     static void dfs(int node){
-        if(visited[node]) {
-            return;
-        }
         visited[node] = true;
         for(int i:list.get(node)) {
+            if(visited[i]) continue;
             if(memory[i] == 0) {
                 memory[i] = node;
             }
